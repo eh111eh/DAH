@@ -95,3 +95,35 @@ pl.title('MCP3208 ADC Sampling of 10 Hz Sine Wave')
 pl.grid(True)
 pl.legend()
 pl.show()
+
+# ==============
+# Import required libraries
+import time
+from DAH import MCP3208
+
+def main():
+    # Define ADC as SPI chip 0 (CE0/GPIO8)
+    ADC0 = MCP3208(chip=0)
+
+    # Select the ADC input channel you connected your signal generator to
+    channel = 0   # Change this to the correct channel number (0–7)
+
+    print("Reading sinusoidal signal on channel", channel)
+    print("Press Ctrl+C to stop.\n")
+
+    try:
+        while True:
+            # Read voltage from the selected channel
+            voltage = ADC0.analogReadVolt(channel)
+            
+            # Print the measured voltage
+            print(f"Channel {channel}: {voltage:.3f} V")
+            
+            # Small delay to see values clearly
+            time.sleep(0.1)   # 100 ms (sampling ~10 Hz is fine for testing)
+
+    except KeyboardInterrupt:
+        print("\nStopped by user.")
+
+if __name__ == "__main__":
+    main()
